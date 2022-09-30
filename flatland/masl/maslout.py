@@ -361,7 +361,6 @@ class MaslOut:
         print("Generating micca domain definitions for " + domain)
         maslfile = domain.replace(" ","") +".masl"
         text_file = open(maslfile, "w")
-        text_file.write("domain " + domain + " is\n")
 
         for aclass in self.subsys.classes:
             # Get the class name from the model; remove all white space
@@ -941,20 +940,19 @@ class MaslOut:
             text_file.write("  end if;\n")
             text_file.write("  T::include(file:"'"' + "class.java" + '"'");\n\n")
         text_file.write("population = T::body();\n")
-        text_file.write("domain = "'"' +  domain + '"'";\n")
         text_file.write("T::include(file:"'"' + "population.java" + '"'");\n")
-        text_file.write("T::emit(file:"'"' + "population.micca" + '"'");\n\n")
+        text_file.write("T::emit(file:"'"' + domain + "_population.micca" + '"'");\n\n")
 
                     
         # output domain definitions in Micca format
                     
         path = domain.replace(" ","") +".micca"
         text_file = open(path, "w")
-        text_file.write("domain " + domain + " {\n")
         
         # emit class definitions
         for c in model_class_list:
             text_file.write("\nclass " + c.keyletter + " {\n")
+            text_file.write("    attribute instance_label {Name_t}\n")
             for attr in c.attrlist:
                 text_file.write("    attribute " + attr.name + " {" + attr.type + "}\n")
             text_file.write("}\n")
@@ -983,7 +981,7 @@ class MaslOut:
                 text_file.write("--")
                 text_file.write(ptxt + " " + binassoc.pclass.keyletter + "\n")
 
-        text_file.write("\n}\n")
+        text_file.write("\n\n")
                
 
                             
